@@ -41,7 +41,7 @@ const generateNextGeneration = (
       directions.forEach(([dx, dy]) => {
         const nx = x + dx;
         const ny = y + dy;
-        //verificar estado en la matriz 
+        //verificar estado en la matriz
         if (
           nx >= 0 &&
           nx < rows &&
@@ -54,6 +54,7 @@ const generateNextGeneration = (
       });
 
       let newStatus: "lives" | "dies" = cell.status;
+
       if (cell.status === "lives" && (brothers < 2 || brothers > 3)) {
         newStatus = "dies";
       } else if (cell.status === "dies" && brothers === 3) {
@@ -70,9 +71,9 @@ const generateNextGeneration = (
 };
 
 const ContainerConway = () => {
-  const [rows, setRows] = useState(5);
-  const [cols, setCols] = useState(5);
-  const [matrix, setMatrix] = useState(() => generateMatrix(5, 5));
+  const [rows, setRows] = useState(15);
+  const [cols, setCols] = useState(15);
+  const [matrix, setMatrix] = useState(() => generateMatrix(rows, cols));
   const [isSimulated, setIsSimulated] = useState(false);
   const intervalRef = useRef<number | null>(null);
 
@@ -85,10 +86,7 @@ const ContainerConway = () => {
       intervalRef.current = window.setInterval(() => {
         setMatrix((prev) => generateNextGeneration(prev, rows, cols));
       }, 1000);
-    } else {
-      if (intervalRef.current) clearInterval(intervalRef.current);
     }
-
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
@@ -117,8 +115,8 @@ const ContainerConway = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 py-10">
-      <div className="flex gap-2">
+    <div className="bg-slate-100 flex flex-col items-center gap-10 py-10">
+      <div className="flex justify-center items-center gap-2">
         <label>
           Filas:
           <input
@@ -139,27 +137,32 @@ const ContainerConway = () => {
             onChange={(e) => setCols(Number(e.target.value))}
           />
         </label>
-        <button className="p-2 bg-blue-500 text-white rounded" onClick={handleSimulated}>
+        <button
+          className="p-2 bg-blue-500 text-white rounded"
+          onClick={handleSimulated}
+        >
           {isSimulated ? "Detener" : "Simular"}
         </button>
       </div>
 
-      <div
-        className="grid"
-        style={{
-          gridTemplateColumns: `repeat(${cols}, 20px)`,
-        }}
-      >
-        {matrix.map((row, rowIndex) =>
-          row.map((cell, colIndex) => (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              onClick={() => handleCellClick(rowIndex, colIndex)}
-              className={`w-[20px] h-[20px] border-[1px] border-slate-400 cursor-pointer 
+      <div  >
+        <div
+          className="grid"
+          style={{
+            gridTemplateColumns: `repeat(${cols}, 20px)`,
+          }}
+        >
+          {matrix.map((row, rowIndex) =>
+            row.map((cell, colIndex) => (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                onClick={() => handleCellClick(rowIndex, colIndex)}
+                className={`w-[20px] h-[20px] border-[1px] border-slate-400 cursor-pointer 
                 ${cell.status === "lives" ? "bg-slate-700" : "bg-slate-100"}`}
-            />
-          ))
-        )}
+              />
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

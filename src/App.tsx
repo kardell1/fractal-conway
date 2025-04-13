@@ -8,9 +8,9 @@ function App() {
   };
   return (
     <>
-      <div
+      <div className="min-h-screen bg-slate-100"
       >
-        <div className="h-screen flex justify-center items-center gap-5">
+        <div className=" py-20 flex justify-center items-center gap-5">
           <button
             className="font-semibold text-2xl p-3 bg-blue-600"
             onClick={() => handleClick("fractal")}
